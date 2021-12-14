@@ -108,9 +108,7 @@ public class LocationActivity extends AppCompatActivity implements View.OnClickL
         mSearchedLocationReference.removeEventListener(mSearchedLocationReferenceListener);
     }
 //    //call upon editor to write information to the shared preference.and finally calling apply
-//    private void addToSharedPreferences(String location){
-//        mEditor.putString(Constants.PREFERENCES_LOCATION_KEY, location).apply();
-//    }
+
 
 
 }

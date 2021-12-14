@@ -9,8 +9,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.adams.topnews.Constants;
@@ -32,8 +36,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NewsListActivity extends AppCompatActivity {
-//    private SharedPreferences mSharedPreferences;
-//    private String mRecentAddress;
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor mEditor;
+    private String mRecentAddress;
 
     private static final String TAG = NewsListActivity.class.getSimpleName();
 
@@ -58,46 +63,46 @@ public class NewsListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String location = intent.getStringExtra("location");
-//
-//        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        mRecentAddress = mSharedPreferences.getString(Constants.PREFERENCES_LOCATION_KEY, null);
 
-//        if (mRecentAddress != null) {
-//            getNews(mRecentAddress);
-//        }
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mRecentAddress = mSharedPreferences.getString(Constants.PREFERENCES_LOCATION_KEY, null);
 
+        if (mRecentAddress != null) {
+            fetchNews(mRecentAddress);
+        }
     }
-    private void getNews(String location){
-        NewsApiInterface client = NewsClient.getNewsClient();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_search, menu);
+        ButterKnife.bind(this);
 
-        Call<News> call = client.getNews("US",Constants.NEWS_API_KEY);
-        call.enqueue(new Callback<News>() {
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mEditor = mSharedPreferences.edit();
+
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onResponse(Call<News> call, Response<News> response) {
-
-                hideProgressBar();
-
-                if (response.isSuccessful()) {
-                    mNews = response.body().getArticles();
-                    mAdapter = new NewsListAdapter(mNews,NewsListActivity.this);
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(NewsListActivity.this);
-                    mRecyclerCategory.setLayoutManager(layoutManager);
-                    mRecyclerCategory.setHasFixedSize(true);
-                    mRecyclerCategory.setAdapter(mAdapter);
-
-
-                    showNews();
-                } else {
-                    showUnsuccessfulMessage();
-                }
+            public boolean onQueryTextSubmit(String location) {
+                addToSharedPreferences(location);
+                fetchNews(location);
+                return false;
             }
 
             @Override
-            public void onFailure(Call<News> call, Throwable t) {
-                hideProgressBar();
-                showFailureMessage();
+            public boolean onQueryTextChange(String location) {
+                return false;
             }
         });
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        return super.onOptionsItemSelected(item);
     }
     private void showFailureMessage(){
         mErrorTextView.setText("Something went wrong. Please check your Internet connection and try again later");
@@ -114,5 +119,41 @@ public class NewsListActivity extends AppCompatActivity {
         mProgressBar.setVisibility(View.GONE);
     }
 
+    private void addToSharedPreferences(String location){
+        mEditor.putString(Constants.PREFERENCES_LOCATION_KEY, location).apply();
     }
+
+    private void fetchNews(String location){
+        NewsApiInterface client = NewsClient.getNewsClient();
+        Call<News> call = client.getNews(location, "news");
+        call.enqueue(new Callback<News>() {
+            @Override
+            public void onResponse(Call<News> call, Response<News> response) {
+
+                hideProgressBar();
+
+                if (response.isSuccessful()) {
+                    mNews = response.body().getArticles();
+                    mAdapter = new NewsListAdapter(mNews,NewsListActivity.this);
+                    mRecyclerCategory.setAdapter(mAdapter);
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(NewsListActivity.this);
+                    mRecyclerCategory.setLayoutManager(layoutManager);
+                    mRecyclerCategory.setHasFixedSize(true);
+
+                    showNews();
+                } else {
+                    showUnsuccessfulMessage();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<News> call, Throwable t) {
+                Log.e(TAG, "onFailure: ",t );
+                hideProgressBar();
+                showFailureMessage();
+            }
+
+        });
+    }
+}
 
