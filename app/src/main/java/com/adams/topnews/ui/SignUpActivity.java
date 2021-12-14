@@ -5,12 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.adams.topnews.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,7 +23,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     //member variable
     @BindView(R.id.otherSignin) TextView mOtherSignIn;
-//    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.signupTextView)
     TextView mSignupTextView;
     @BindView(R.id.signupButton)
@@ -29,8 +31,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     EditText mEmailEditText;
     @BindView(R.id.passwordEditText)
     EditText mPasswordEditText;
-//    @BindView(R.id.confirmPasswordEditText) EditText mConfirmPasswordEditText;
-//    @BindView(R.id.userNameEditText) EditText mUserNameEditText;
+    @BindView(R.id.confirmPasswordEditText) EditText mConfirmPasswordEditText;
+    @BindView(R.id.userNameEditText) EditText mUserNameEditText;
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_up);
         //Binding views
         ButterKnife.bind(this);
+
+        mAuth = FirebaseAuth.getInstance();
 
         //setting clickListener
         mSignupButton.setOnClickListener(this);
@@ -57,20 +63,31 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             startActivity(intent);
             finish();
         }
-//        //create new user
-//        if (view == mSignupButton){
-//            createNewUser();
-//        }
+
+        //create new user
+        if (view == mSignupButton){
+            createNewUser();
+        }
         Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
             startActivity(intent);
 
     }
     //user creation
-//    private void createNewUser(){
-//
-//        final String name = mUserNameEditText.getText().toString().trim();
-//        final String email = mEmailEditText.getText().toString().trim();
-//        String password = mPasswordEditText.getText().toString().trim();
-//        String confirmPassword = mConfirmPasswordEditText.getText().toString().trim();
-//    }
+    private void createNewUser(){
+
+        final String name = mUserNameEditText.getText().toString().trim();
+        final String email = mEmailEditText.getText().toString().trim();
+        String password = mPasswordEditText.getText().toString().trim();
+        String confirmPassword = mConfirmPasswordEditText.getText().toString().trim();
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "Authentication successful");
+                    } else {
+                        Toast.makeText(SignUpActivity.this, "Authentication failed",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 }

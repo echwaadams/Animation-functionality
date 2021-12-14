@@ -36,21 +36,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         ButterKnife.bind(this);
 
         //setting clickListener
-//        mOtherSignup.setOnClickListener(this);
+        mOtherSignup.setOnClickListener(this);
 
         mLoginButton.setOnClickListener(this);
     }
     @Override
     public void onClick(View view){
-//        if (view == mOtherSignup){
-//            Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
+        if (view == mOtherSignup){
+            Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         if (view == mLoginButton){
             Intent intent = new Intent(LoginActivity.this, LocationActivity.class);
             startActivity(intent);
-//            finish();
+            finish();
         }
     }
 }

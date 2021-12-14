@@ -93,6 +93,9 @@ dependencies {
     //Firebase RecyclerView Setup
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.firebaseui:firebase-ui-database:7.1.1'
+    //Firebase Auth
+    implementation 'com.google.firebase:firebase-auth'
+
 
 
 }
