@@ -8,6 +8,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +18,7 @@ import android.widget.TextView;
 
 import com.adams.topnews.Constants;
 import com.adams.topnews.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -77,7 +81,33 @@ public class LocationActivity extends AppCompatActivity implements View.OnClickL
         mFindHomesButton.setOnClickListener(this);
         mSavedNewsButton.setOnClickListener(this);
     }
+    //Logout
+    private void logout(){
+        // returning to MainActivity on Logout
+        FirebaseAuth.getInstance().signOut();
+        Intent intent4 = new Intent(LocationActivity.this, MainActivity.class);
+        intent4.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent4);
+        finish();
+    }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if (id == R.id.action_logout){
+            logout();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     @Override
     public void onClick(View view){
         if (view == mFindHomesButton){
@@ -108,6 +138,7 @@ public class LocationActivity extends AppCompatActivity implements View.OnClickL
         mSearchedLocationReference.removeEventListener(mSearchedLocationReferenceListener);
     }
 //    //call upon editor to write information to the shared preference.and finally calling apply
+
 
 
 

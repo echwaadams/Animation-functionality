@@ -1,5 +1,6 @@
 package com.adams.topnews.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.adams.topnews.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +37,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.userNameEditText) EditText mUserNameEditText;
 
     private FirebaseAuth mAuth;
+    //listener
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         ButterKnife.bind(this);
 
         mAuth = FirebaseAuth.getInstance();
+
+        //AuthListener
+        createAuthStateListener();
 
         //setting clickListener
         mSignupButton.setOnClickListener(this);
@@ -89,5 +96,33 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    //Listening for User Authentication
+    private void createAuthStateListener(){
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                final FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    Intent intent3 = new Intent(SignUpActivity.this, LocationActivity.class);
+                    intent3.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent3);
+                    finish();
+                }
+            }
+        };
+    }
+    @Override
+    public void onStart(){
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+    @Override
+    public void onStop(){
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
     }
 }
