@@ -90,6 +90,10 @@ public class LocationActivity extends AppCompatActivity implements View.OnClickL
 //            }
             Intent intent = new Intent(LocationActivity.this, NewsListActivity.class);
             startActivity(intent);
+            if (view == mSavedNewsButton) {
+                Intent intent2 = new Intent(LocationActivity.this, SavedNewsListActivity.class);
+                startActivity(intent2);
+            }
         }
     }
     public void saveLocationToFirebase(String location){
