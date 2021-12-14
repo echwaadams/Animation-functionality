@@ -32,8 +32,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NewsListActivity extends AppCompatActivity {
-    private SharedPreferences mSharedPreferences;
-    private String mRecentAddress;
+//    private SharedPreferences mSharedPreferences;
+//    private String mRecentAddress;
 
     private static final String TAG = NewsListActivity.class.getSimpleName();
 
@@ -57,14 +57,14 @@ public class NewsListActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        String country = intent.getStringExtra("country");
+        String location = intent.getStringExtra("location");
+//
+//        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+//        mRecentAddress = mSharedPreferences.getString(Constants.PREFERENCES_LOCATION_KEY, null);
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mRecentAddress = mSharedPreferences.getString(Constants.PREFERENCES_LOCATION_KEY, null);
-
-        if (mRecentAddress != null) {
-            getNews(mRecentAddress);
-        }
+//        if (mRecentAddress != null) {
+//            getNews(mRecentAddress);
+//        }
 
     }
     private void getNews(String location){

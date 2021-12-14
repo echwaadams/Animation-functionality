@@ -11,10 +11,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.adams.topnews.Constants;
 import com.adams.topnews.R;
 import com.adams.topnews.models.Article;
 import com.adams.topnews.models.Source;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
@@ -30,7 +34,7 @@ import butterknife.ButterKnife;
  * Use the {@link NewsDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewsDetailFragment extends Fragment {
+public class NewsDetailFragment extends Fragment implements View.OnClickListener{
     @BindView(R.id.saveNewsButton)
     Button mSaveNewsButton;
     @BindView(R.id.newsNameTextView)
@@ -85,9 +89,21 @@ public class NewsDetailFragment extends Fragment {
         mNewsNameTextView.setText(mArticle.getTitle());
         mDescriptionTextView.setText(mArticle.getDescription());
 
+        mSaveNewsButton.setOnClickListener(this);
+
 //        List<String> source = new ArrayList<>();
 //
 //        for (Source sources: mArticle.getSource()) sources.getName();
         return  view;
+    }
+    @Override
+    public void onClick(View view){
+        if (view == mSaveNewsButton) {
+            DatabaseReference newsRef = FirebaseDatabase
+                    .getInstance()
+                    .getReference(Constants.FIREBASE_CHILD_NEWS);
+            newsRef.push().setValue(mNews);
+            Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
+        }
     }
 }
