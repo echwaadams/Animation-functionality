@@ -41,22 +41,22 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         //setting clickListener
         mSignupButton.setOnClickListener(this);
-//        mOtherSignIn.setOnClickListener(this);
+        mOtherSignIn.setOnClickListener(this);
     }
     @Override
     public void onClick(View view){
-//        if (view == mOtherSignIn){
-//            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//            startActivity(intent);
-//            finish();
-//        }
+        if (view == mOtherSignIn){
+            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        }
         //passing intent to login activity
-//        if (view == mSignupButton){
-//            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
+        if (view == mSignupButton){
+            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
 //        //create new user
 //        if (view == mSignupButton){
 //            createNewUser();

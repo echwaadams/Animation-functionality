@@ -48,7 +48,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsVi
         return mNews.size();
     }
 
-    public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class NewsViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.newsImageView)
         ImageView mNewsImageView;
         @BindView(R.id.categoryTextView)
@@ -72,13 +72,13 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsVi
             mNewsNameTextView.setText(news.getAuthor());
             mCategoryTextView.setText(news.getSource().getSystemId());
         }
-        @Override
-        public void onClick(View v){
-            int itemPosition = getItemCount();
-            Intent intent = new Intent(mContext, NewsDetailActivity.class);
-            intent.putExtra("position", itemPosition);
-            intent.putExtra("news", Parcels.wrap(mNews));
-            mContext.startActivity(intent);
-        }
+//        @Override
+//        public void onClick(View v){
+//            int itemPosition = getItemCount();
+//            Intent intent = new Intent(mContext, NewsDetailActivity.class);
+//            intent.putExtra("position", itemPosition);
+//            intent.putExtra("news", Parcels.wrap(mNews));
+//            mContext.startActivity(intent);
+//        }
     }
 }

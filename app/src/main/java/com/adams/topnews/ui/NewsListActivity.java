@@ -5,11 +5,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.adams.topnews.Constants;
 import com.adams.topnews.R;
 import com.adams.topnews.adapters.NewsListAdapter;
 import com.adams.topnews.models.Article;
@@ -24,12 +28,17 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NewsListActivity extends AppCompatActivity {
+    private SharedPreferences mSharedPreferences;
+    private String mRecentAddress;
+
     private static final String TAG = NewsListActivity.class.getSimpleName();
 
-    @BindView(R.id.titleCategory)
-    TextView mTitleCategory;
+//    @BindView(R.id.titleCategory)
+//    TextView mTitleCategory;
     @BindView(R.id.errorTextView) TextView mErrorTextView;
     @BindView(R.id.progressBar)
     ProgressBar mProgressBar;
@@ -50,11 +59,18 @@ public class NewsListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String country = intent.getStringExtra("country");
 
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mRecentAddress = mSharedPreferences.getString(Constants.PREFERENCES_LOCATION_KEY, null);
 
+        if (mRecentAddress != null) {
+            getNews(mRecentAddress);
+        }
+
+    }
+    private void getNews(String location){
         NewsApiInterface client = NewsClient.getNewsClient();
 
-        Call<News> call = client.getNews(country, "news");
-
+        Call<News> call = client.getNews("US",Constants.NEWS_API_KEY);
         call.enqueue(new Callback<News>() {
             @Override
             public void onResponse(Call<News> call, Response<News> response) {
@@ -64,10 +80,11 @@ public class NewsListActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     mNews = response.body().getArticles();
                     mAdapter = new NewsListAdapter(mNews,NewsListActivity.this);
-                    mRecyclerCategory.setAdapter(mAdapter);
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(NewsListActivity.this);
                     mRecyclerCategory.setLayoutManager(layoutManager);
                     mRecyclerCategory.setHasFixedSize(true);
+                    mRecyclerCategory.setAdapter(mAdapter);
+
 
                     showNews();
                 } else {
@@ -83,7 +100,7 @@ public class NewsListActivity extends AppCompatActivity {
         });
     }
     private void showFailureMessage(){
-        mErrorTextView.setText("SOmething went wrong. Please check your Internet connection and try again later");
+        mErrorTextView.setText("Something went wrong. Please check your Internet connection and try again later");
         mErrorTextView.setVisibility(View.VISIBLE);
     }
     private void showUnsuccessfulMessage(){
@@ -96,4 +113,6 @@ public class NewsListActivity extends AppCompatActivity {
     private void hideProgressBar(){
         mProgressBar.setVisibility(View.GONE);
     }
-}
+
+    }
+

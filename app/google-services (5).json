@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "344114401778",
+    "project_id": "top-news-48880",
+    "storage_bucket": "top-news-48880.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:344114401778:android:71c1f803cb0cecc2dd1b6b",
+        "android_client_info": {
+          "package_name": "com.adams.topnews"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "344114401778-kl3eeu7uae962o70b2tu1vdc0j83feoo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAh1hZnPhHlAB85MnPwDF0NJ0MhoFZtntM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "344114401778-kl3eeu7uae962o70b2tu1vdc0j83feoo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

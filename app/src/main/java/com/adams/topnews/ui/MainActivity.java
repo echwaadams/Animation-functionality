@@ -1,4 +1,4 @@
-package com.adams.topnews;
+package com.adams.topnews.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,12 +9,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.adams.topnews.ui.SignUpActivity;
+import com.adams.topnews.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
     //member variable
     @BindView(R.id.continueButton)
     Button mContinueButton;
@@ -29,15 +30,14 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         //setting clickListener
-        mContinueButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Welcome To Top News",Toast.LENGTH_LONG).show();
+        mContinueButton.setOnClickListener(this);
+    }
+    @Override
+    public void onClick(View view) {
+        Toast.makeText(MainActivity.this, "Welcome To Top News",Toast.LENGTH_LONG).show();
 
-                //passing intent between activity
-                Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
-                startActivity(intent);
-            }
-        });
+        //passing intent between activity
+        Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+        startActivity(intent);
     }
 }
