@@ -79,32 +79,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             startActivity(intent);
             finish();
         }
-        //passing intent to login activity
-        if (view == mSignupButton){
-            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
 
         //create new user
         if (view == mSignupButton){
             createNewUser();
         }
-        Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-            startActivity(intent);
 
     }
-    private void showProgressBar() {
-        mSignInProgressBar.setVisibility(View.VISIBLE);
-        mLoadingSignUp.setVisibility(View.VISIBLE);
-        mLoadingSignUp.setText("Sign Up process in Progress");
-    }
-
-    private void hideProgressBar() {
-        mSignInProgressBar.setVisibility(View.GONE);
-        mLoadingSignUp.setVisibility(View.GONE);
-    }
-
     //user creation
     private void createNewUser(){
         mName = mUserNameEditText.getText().toString().trim();
@@ -123,23 +104,46 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         showProgressBar();
 
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "Authentication successful");
                         hideProgressBar();
-
-                        if (task.isSuccessful()) {
-                            Toast.makeText(SignUpActivity.this, "Authentication successful",
-                                    Toast.LENGTH_SHORT).show();
-
-                            createFirebaseUserProfile(Objects.requireNonNull(task.getResult().getUser()));
-                        } else {
-                            Toast.makeText(SignUpActivity.this, "Authentication failed",
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                        createFirebaseUserProfile(Objects.requireNonNull(task.getResult().getUser()));
+                        Toast.makeText(SignUpActivity.this, "Firebase Authentication is successful.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(SignUpActivity.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+    private void showProgressBar() {
+        mSignInProgressBar.setVisibility(View.VISIBLE);
+        mLoadingSignUp.setVisibility(View.VISIBLE);
+        mLoadingSignUp.setText("Sign Up process in Progress");
+    }
+
+    private void hideProgressBar() {
+        mSignInProgressBar.setVisibility(View.GONE);
+        mLoadingSignUp.setVisibility(View.GONE);
+    }
+
+    //Listening for User Authentication
+    private void createAuthStateListener(){
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                final FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        };
+    }
+
+
     //method to set user name
     private void createFirebaseUserProfile(final FirebaseUser user){
         UserProfileChangeRequest addProfileName = new UserProfileChangeRequest.Builder()
@@ -158,21 +162,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 });
     }
 
-    //Listening for User Authentication
-    private void createAuthStateListener(){
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                final FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    Intent intent3 = new Intent(SignUpActivity.this, LocationActivity.class);
-                    intent3.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent3);
-                    finish();
-                }
-            }
-        };
-    }
+
     // Validating Registration Credentials
     private boolean isValidEmail(String email){
         boolean isGoodEmail =
@@ -214,6 +204,4 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-
-
 }

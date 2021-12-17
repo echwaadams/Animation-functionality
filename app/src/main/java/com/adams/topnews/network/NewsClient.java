@@ -47,7 +47,7 @@ public class NewsClient {
                         @Override
                         public Response intercept(Chain chain) throws IOException {
                             Request newRequest = chain.request().newBuilder()
-                                    .addHeader("Authorization",NEWS_API_KEY)
+                                    .addHeader("apiKey",NEWS_API_KEY)
                                     .build();
                             Log.e("adams",newRequest.toString());
                             return chain.proceed(newRequest);
