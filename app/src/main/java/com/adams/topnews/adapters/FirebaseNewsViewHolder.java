@@ -42,7 +42,7 @@ public class FirebaseNewsViewHolder extends RecyclerView.ViewHolder implements V
         Picasso.get().load(news.getUrlToImage()).into(newsImageView);
 
         nameTextView.setText(news.getAuthor());
-        category.setText(news.getSource().getSystemId());
+        category.setText(news.getSource().getName());
     }
     @Override
     public void onClick(View view){

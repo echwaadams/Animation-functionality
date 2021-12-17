@@ -28,7 +28,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsVi
     private Context mContext;
     private NewsViewHolder viewHolder;
 
-    public NewsListAdapter(List<Article> mNews, Context mContext) {
+    public NewsListAdapter(Context mContext, List<Article> mNews) {
         this.mNews = mNews;
         this.mContext = mContext;
     }
@@ -70,15 +70,15 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsVi
         public void bindNews(Article news) {
             Picasso.get().load(news.getUrlToImage()).into(mNewsImageView);
             mNewsNameTextView.setText(news.getAuthor());
-            mCategoryTextView.setText(news.getSource().getSystemId());
+            //mCategoryTextView.setText(news.getSource().getId());
         }
-//        @Override
-//        public void onClick(View v){
-//            int itemPosition = getItemCount();
-//            Intent intent = new Intent(mContext, NewsDetailActivity.class);
-//            intent.putExtra("position", itemPosition);
-//            intent.putExtra("news", Parcels.wrap(mNews));
-//            mContext.startActivity(intent);
-//        }
+        //@Override
+        public void onClick(View v){
+            int itemPosition = getItemCount();
+            Intent intent = new Intent(mContext, NewsDetailActivity.class);
+            intent.putExtra("position", itemPosition);
+            intent.putExtra("news", Parcels.wrap(mNews));
+            mContext.startActivity(intent);
+        }
     }
 }

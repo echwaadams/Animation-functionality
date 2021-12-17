@@ -1,25 +1,25 @@
 package com.adams.topnews.network;
 
-import com.adams.topnews.models.News;
+import static com.adams.topnews.Constants.NEWS_API_KEY;
+
+import com.adams.topnews.BuildConfig;
+import com.adams.topnews.models.NewsBusinessesSearchResponse;
+
+import java.util.Map;
+
+import javax.xml.transform.Source;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 public interface NewsApiInterface {
-   @GET("top-headlines")
-    Call<News> getNews(
-            @Query("country") String country,
-            @Query("apiKey") String apiKey
-   );
-    @GET("everything")
-    Call<News> getNewsSearch(
-
+    @GET("/v2/everything")
+    Call<NewsBusinessesSearchResponse> getAdams(
             @Query("q") String keyword,
-            @Query("language") String language,
-            @Query("sortBy") String sortBy,
             @Query("apiKey") String apiKey
-
     );
 
 }

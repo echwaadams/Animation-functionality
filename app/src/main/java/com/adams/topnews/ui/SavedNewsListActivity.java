@@ -18,6 +18,8 @@ import com.adams.topnews.adapters.FirebaseNewsViewHolder;
 import com.adams.topnews.models.Article;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -42,10 +44,17 @@ public class SavedNewsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news);
         //binding views
 
-        mNewsReference = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_CHILD_NEWS);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user.getUid();
+
+        mNewsReference = FirebaseDatabase
+                .getInstance()
+                .getReference(Constants.FIREBASE_CHILD_NEWS)
+                .child(uid);
+
         setUpFirebaseAdapter();
         hideProgressBar();
-        showRestaurants();
+        showNews();
     }
     private void setUpFirebaseAdapter(){
         FirebaseRecyclerOptions<Article> options =
@@ -80,7 +89,7 @@ public class SavedNewsListActivity extends AppCompatActivity {
             mFirebaseAdapter.stopListening();
         }
     }
-    private void showRestaurants() {
+    private void showNews() {
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 

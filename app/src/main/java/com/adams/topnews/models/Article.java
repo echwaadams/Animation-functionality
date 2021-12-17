@@ -1,3 +1,4 @@
+
 package com.adams.topnews.models;
 
 import com.google.gson.annotations.Expose;
@@ -5,50 +6,71 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
-import javax.xml.transform.Source;
-
-@Parcel(Parcel.Serialization.BEAN)
+@Parcel
 public class Article {
 
     @SerializedName("source")
     @Expose
     private Source source;
-
     @SerializedName("author")
     @Expose
     private String author;
-
     @SerializedName("title")
     @Expose
     private String title;
-
     @SerializedName("description")
     @Expose
     private String description;
-
     @SerializedName("url")
     @Expose
     private String url;
-
     @SerializedName("urlToImage")
     @Expose
     private String urlToImage;
-
     @SerializedName("publishedAt")
     @Expose
     private String publishedAt;
+    @SerializedName("content")
+    @Expose
+    private String content;
 
-    // empty constructor
-    public Article(){
-
+    /**
+     * No args constructor for use in serialization
+     * 
+     */
+    public Article() {
     }
+
+    /**
+     * 
+     * @param publishedAt
+     * @param author
+     * @param urlToImage
+     * @param description
+     * @param source
+     * @param title
+     * @param url
+     * @param content
+     */
+    public Article(Source source, String author, String title, String description, String url, String urlToImage, String publishedAt, String content) {
+        super();
+        this.source = source;
+        this.author = author;
+        this.title = title;
+        this.description = description;
+        this.url = url;
+        this.urlToImage = urlToImage;
+        this.publishedAt = publishedAt;
+        this.content = content;
+    }
+
     public Source getSource() {
         return source;
     }
 
-//    public void setSource(Source source) {
-//        this.source = source;
-//    }
+    public void setSource(Source source) {
+        this.source = source;
+    }
 
     public String getAuthor() {
         return author;
@@ -97,4 +119,13 @@ public class Article {
     public void setPublishedAt(String publishedAt) {
         this.publishedAt = publishedAt;
     }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
 }

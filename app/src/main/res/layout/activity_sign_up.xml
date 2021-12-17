@@ -91,6 +91,22 @@
         android:layout_below="@id/signupButton"
         android:layout_marginBottom="20dp"
         android:textSize="16sp"/>
+    <ProgressBar
+        android:id="@+id/firebaseProgressBar"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/loadingTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/firebaseProgressBar"
+        android:textColor="@color/colorPrimaryText"
+        android:layout_margin="20dp"
+        android:visibility="gone" />
 
 
 </RelativeLayout>

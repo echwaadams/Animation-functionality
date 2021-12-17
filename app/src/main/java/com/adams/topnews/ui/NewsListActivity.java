@@ -21,9 +21,11 @@ import com.adams.topnews.Constants;
 import com.adams.topnews.R;
 import com.adams.topnews.adapters.NewsListAdapter;
 import com.adams.topnews.models.Article;
-import com.adams.topnews.models.News;
+import com.adams.topnews.models.NewsBusinessesSearchResponse;
 import com.adams.topnews.network.NewsApiInterface;
 import com.adams.topnews.network.NewsClient;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -40,10 +42,14 @@ public class NewsListActivity extends AppCompatActivity {
     private SharedPreferences.Editor mEditor;
     private String mRecentAddress;
 
+    private DatabaseReference mSearchedLocationReference;
+
+    private ValueEventListener mSearchedLocationReferenceListener;
+
+
     private static final String TAG = NewsListActivity.class.getSimpleName();
 
-//    @BindView(R.id.titleCategory)
-//    TextView mTitleCategory;
+
     @BindView(R.id.errorTextView) TextView mErrorTextView;
     @BindView(R.id.progressBar)
     ProgressBar mProgressBar;
@@ -53,6 +59,7 @@ public class NewsListActivity extends AppCompatActivity {
     private NewsListAdapter mAdapter;
 
     public List<Article> mNews;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +67,6 @@ public class NewsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news);
         //Binding views
         ButterKnife.bind(this);
-
-        Intent intent = getIntent();
-        String location = intent.getStringExtra("location");
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mRecentAddress = mSharedPreferences.getString(Constants.PREFERENCES_LOCATION_KEY, null);
@@ -104,10 +108,6 @@ public class NewsListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         return super.onOptionsItemSelected(item);
     }
-    private void showFailureMessage(){
-        mErrorTextView.setText("Something went wrong. Please check your Internet connection and try again later");
-        mErrorTextView.setVisibility(View.VISIBLE);
-    }
     private void showUnsuccessfulMessage(){
         mErrorTextView.setText("Something went wrong. Please try again later");
         mErrorTextView.setVisibility(View.VISIBLE);
@@ -119,41 +119,96 @@ public class NewsListActivity extends AppCompatActivity {
         mProgressBar.setVisibility(View.GONE);
     }
 
-    private void addToSharedPreferences(String location){
-        mEditor.putString(Constants.PREFERENCES_LOCATION_KEY, location).apply();
+    private void addToSharedPreferences(String country){
+        mEditor.putString(Constants.PREFERENCES_LOCATION_KEY, country).apply();
     }
 
-    private void fetchNews(String location){
-        NewsApiInterface client = NewsClient.getNewsClient();
-        Call<News> call = client.getNews(location, "news");
-        call.enqueue(new Callback<News>() {
+    private void fetchNews(String country){
+        Log.e("adams","fetching news");
+
+        NewsClient.getClient().getAdams("business","d2b009aa81f942d4bba769b035e179a4")
+                .enqueue(new Callback<NewsBusinessesSearchResponse>() {
+
             @Override
-            public void onResponse(Call<News> call, Response<News> response) {
+            public void onResponse(Call<NewsBusinessesSearchResponse> call, Response<NewsBusinessesSearchResponse> response) {
 
                 hideProgressBar();
 
+                Log.e("adams",response.message());
                 if (response.isSuccessful()) {
                     mNews = response.body().getArticles();
-                    mAdapter = new NewsListAdapter(mNews,NewsListActivity.this);
+                    NewsListAdapter mAdapter = new NewsListAdapter(NewsListActivity.this, mNews);
                     mRecyclerCategory.setAdapter(mAdapter);
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(NewsListActivity.this);
-                    mRecyclerCategory.setLayoutManager(layoutManager);
+                    mRecyclerCategory.setLayoutManager(new LinearLayoutManager(NewsListActivity.this));
                     mRecyclerCategory.setHasFixedSize(true);
 
                     showNews();
                 } else {
                     showUnsuccessfulMessage();
                 }
+
             }
 
             @Override
-            public void onFailure(Call<News> call, Throwable t) {
-                Log.e(TAG, "onFailure: ",t );
+            public void onFailure(Call<NewsBusinessesSearchResponse> call, Throwable t) {
+                //Log.e("adams",call.toString());
+                Log.e("adams",t.getMessage());
                 hideProgressBar();
                 showFailureMessage();
             }
-
         });
+
+
+//        NewsApiInterface client = NewsClient.getClient();
+
+//        Call<NewsBusinessesSearchResponse> call = client.getArticles("business", "d2b009aa81f942d4bba769b035e179a4");
+
+//        call.enqueue(new Callback<NewsBusinessesSearchResponse>() {
+//            @Override
+//            public void onResponse(Call<NewsBusinessesSearchResponse> call, Response<NewsBusinessesSearchResponse> response) {
+////
+//                hideProgressBar();
+//
+//                Log.e("adams",response.body().toString());
+//                if (response.isSuccessful()) {
+//                    mNews = response.body().getArticles();
+//                    NewsListAdapter mAdapter = new NewsListAdapter(NewsListActivity.this, mNews);
+//                    mRecyclerCategory.setAdapter(mAdapter);
+//                    mRecyclerCategory.setLayoutManager(new LinearLayoutManager(NewsListActivity.this));
+//                    mRecyclerCategory.setHasFixedSize(true);
+//
+//                    showNews();
+//                } else {
+//                    showUnsuccessfulMessage();
+//                }
+           // }
+
+//            @Override
+//            public void onFailure(Call<NewsBusinessesSearchResponse> call, Throwable t) {
+//
+//                hideProgressBar();
+//                showFailureMessage();
+//
+//            }
+      //  });
+
+
+   }
+
+    private void   showFailureMessage(){
+        mErrorTextView.setText("Something went wrong,Check your internet connection");
+        mErrorTextView.setVisibility(View.VISIBLE);
     }
+
+    private void showUnSuccessfullMessage(){
+        mErrorTextView.setText("Something went wrong,Try Again Later");
+        mErrorTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void  ShowNews(){
+        mRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+
 }
 

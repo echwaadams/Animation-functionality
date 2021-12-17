@@ -17,6 +17,8 @@ import com.adams.topnews.Constants;
 import com.adams.topnews.R;
 import com.adams.topnews.models.Article;
 import com.adams.topnews.models.Source;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
@@ -99,10 +101,18 @@ public class NewsDetailFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View view){
         if (view == mSaveNewsButton) {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String uid = user.getUid();
             DatabaseReference newsRef = FirebaseDatabase
                     .getInstance()
-                    .getReference(Constants.FIREBASE_CHILD_NEWS);
-            newsRef.push().setValue(mNews);
+                    .getReference(Constants.FIREBASE_CHILD_NEWS)
+                    .child(uid);
+
+            DatabaseReference pushRef = newsRef.push();
+            String pushId = pushRef.getKey();
+//            mNews.setPushId(pushId);
+            pushRef.setValue(mNews);
+
             Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
         }
     }

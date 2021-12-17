@@ -17,9 +17,9 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/userNameEditText"
+        android:id="@+id/userEmailEditText"
         android:background="#38ffffff"
-        android:hint="Username"
+        android:hint="Email"
         android:layout_below="@id/loginTextView"
         android:textColorHint="@color/white"
         android:layout_margin="10dp"
@@ -32,7 +32,8 @@
         android:id="@+id/passwordEditText"
         android:background="#38ffffff"
         android:hint="Password"
-        android:layout_below="@id/userNameEditText"
+        android:layout_below="@id/userEmailEditText"
+        android:inputType="textPassword"
         android:textColorHint="@color/white"
         android:layout_margin="10dp"
         android:drawableLeft="@drawable/ic_baseline_info_24"
@@ -62,5 +63,22 @@
         android:textColor="@color/white"
         android:layout_marginTop="20dp"
         android:textSize="16sp"/>
+    <ProgressBar
+        android:id="@+id/firebaseProgressBar"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/loadingTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/firebaseProgressBar"
+        android:textColor="@color/colorPrimaryText"
+        android:layout_margin="20dp"
+        android:visibility="gone" />
+
 
 </RelativeLayout>

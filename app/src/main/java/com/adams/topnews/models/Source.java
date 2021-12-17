@@ -1,3 +1,4 @@
+
 package com.adams.topnews.models;
 
 import com.google.gson.annotations.Expose;
@@ -5,22 +6,39 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
-@Parcel(Parcel.Serialization.BEAN)
+@Parcel
 public class Source {
 
     @SerializedName("id")
     @Expose
-    private String id;
-
+    private int id;
     @SerializedName("name")
     @Expose
     private String name;
 
-    public String getId() {
+    /**
+     * No args constructor for use in serialization
+     * 
+     */
+    public Source() {
+    }
+
+    /**
+     * 
+     * @param name
+     * @param id
+     */
+    public Source(int id, String name) {
+        super();
+        this.id = id;
+        this.name = name;
+    }
+
+    public Object getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -31,4 +49,5 @@ public class Source {
     public void setName(String name) {
         this.name = name;
     }
+
 }
