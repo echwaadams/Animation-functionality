@@ -30,38 +30,60 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NewsClient {
 
-    private static Retrofit retrofit = null;
-    public static  NewsApiInterface getClient(){
-//        if (retrofit == null){
+//    private static Retrofit retrofit = null;
+//    public static  NewsApiInterface getClient(){
+////        if (retrofit == null){
+////            retrofit = new Retrofit.Builder()
+////                    .baseUrl(NEWSAPI_BASE_URL)
+////                    .addConverterFactory(GsonConverterFactory.create())
+////                    .build();
+////        }
+////
+////        return retrofit.create(NewsApiInterface.class);
+////    }
+//        if (retrofit ==null){
+//            OkHttpClient okHttpClient = new OkHttpClient.Builder()
+//                    .addInterceptor(new Interceptor() {
+//                        @Override
+//                        public Response intercept(Chain chain) throws IOException {
+//                            Request newRequest = chain.request().newBuilder()
+//                                    .addHeader("apiKey",NEWS_API_KEY)
+//                                    .build();
+//                            Log.e("adams",newRequest.toString());
+//                            return chain.proceed(newRequest);
+//                        }
+//                    })
+//                    .build();
 //            retrofit = new Retrofit.Builder()
 //                    .baseUrl(NEWSAPI_BASE_URL)
+//                    .client(okHttpClient)
 //                    .addConverterFactory(GsonConverterFactory.create())
 //                    .build();
 //        }
-//
-//        return retrofit.create(NewsApiInterface.class);
+//        return  retrofit.create(NewsApiInterface.class);
 //    }
-        if (retrofit ==null){
-            OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                    .addInterceptor(new Interceptor() {
-                        @Override
-                        public Response intercept(Chain chain) throws IOException {
-                            Request newRequest = chain.request().newBuilder()
-                                    .addHeader("apiKey",NEWS_API_KEY)
-                                    .build();
-                            Log.e("adams",newRequest.toString());
-                            return chain.proceed(newRequest);
-                        }
-                    })
+
+    private static Retrofit retrofit = null;
+    public static  NewsApiInterface getClient() {
+        if (retrofit == null) {
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+                    .url("https://dark-sky.p.rapidapi.com/%7Blatitude%7D,%7Blongitude%7D?units=auto&lang=en")
+                    .get()
+                    .addHeader("x-rapidapi-host", "dark-sky.p.rapidapi.com")
+                    .addHeader("x-rapidapi-key", "099553db8dmsh68c697c48214419p1d5221jsnf1df0021aec3")
                     .build();
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(NEWSAPI_BASE_URL)
-                    .client(okHttpClient)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+
+            try {
+                Response response = client.newCall(request).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        return  retrofit.create(NewsApiInterface.class);
+        return retrofit.create(NewsApiInterface.class);
     }
+
 }
 
 

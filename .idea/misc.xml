@@ -3,14 +3,24 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout-land/activity_news.xml" value="0.1" />
+        <entry key="app/src/main/res/layout-land/activity_saved_news_list.xml" value="0.1" />
+        <entry key="app/src/main/res/layout-land/fragment_news_detail.xml" value="0.1" />
+        <entry key="app/src/main/res/layout-land/news_list_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_location.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_news.xml" value="0.15" />
         <entry key="app/src/main/res/layout/activity_news_detail.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_saved_news_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_news_detail.xml" value="0.23333333333333334" />
+        <entry key="app/src/main/res/layout/fragment_news_list.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_saved_news_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/news_list_item.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/news_list_item_drag.xml" value="0.25" />
+        <entry key="app/src/main/res/menu/menu_photo.xml" value="0.22" />
+        <entry key="app/src/main/res/xml/file_paths.xml" value="0.1" />
       </map>
     </option>
   </component>

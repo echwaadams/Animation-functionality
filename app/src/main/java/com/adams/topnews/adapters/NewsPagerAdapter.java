@@ -8,19 +8,22 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import com.adams.topnews.models.Article;
 import com.adams.topnews.ui.NewsDetailFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewsPagerAdapter extends FragmentPagerAdapter {
-    private List<Article> mNews;
+    private ArrayList<Article> mNews;
+    private String mSource;
 
-    public NewsPagerAdapter(@NonNull FragmentManager fm, int behavior, List<Article> mNews) {
+    public NewsPagerAdapter(@NonNull FragmentManager fm, int behavior, ArrayList<Article> mNews, String source) {
         super(fm, behavior);
         this.mNews = mNews;
+        mSource = source;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return NewsDetailFragment.newInstance(mNews.get(position));
+        return NewsDetailFragment.newInstance(mNews, position, mSource);
     }
 
     @Override

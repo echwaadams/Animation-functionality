@@ -33,6 +33,7 @@ public class Article {
     @SerializedName("content")
     @Expose
     private String content;
+    String index;
 
     /**
      * No args constructor for use in serialization
@@ -62,9 +63,10 @@ public class Article {
         this.urlToImage = urlToImage;
         this.publishedAt = publishedAt;
         this.content = content;
+        this.index = "not_specified";
     }
 
-    public Source getSource() {
+    public int getSource() {
         return source;
     }
 
@@ -126,6 +128,12 @@ public class Article {
 
     public void setContent(String content) {
         this.content = content;
+    }
+    public String getIndex(){
+        return index;
+    }
+    public void setIndex(String index){
+        this.index = index;
     }
 
 }
